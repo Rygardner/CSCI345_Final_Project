@@ -17,7 +17,7 @@ class Game
 
     protected:
     virtual void setup() = 0;
-    virtual void update(float dt) = 0;
+    virtual void update(float dt,int tick) = 0;
     virtual void keyHandler(SDL_Keycode symbol) = 0;
     virtual void draw() = 0;
 
@@ -51,7 +51,7 @@ class Game
                 int now = SDL_GetTicks();
                 float dt = (float)(now-last) / 1000.0;
                 last = now;
-                update(dt);
+                update(dt,now);
 
                 while (SDL_PollEvent(&e) != 0)
                 {

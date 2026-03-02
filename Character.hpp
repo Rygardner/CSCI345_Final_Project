@@ -4,6 +4,9 @@
 
 using namespace std;
 
+const int WIDTH=640;
+const int HEIGHT=480; 
+
 class Sprite{
   protected:
     vector<SDL_Texture*> textures;
@@ -19,7 +22,7 @@ class Sprite{
   SDL_Rect getDestination() { return dst; }
   void stop(){ animated=false;}
   void go() {  animated=true;}
-  void die(){ dead=true; }
+  void die(){ dead=true; moveTo(0,0); }
   bool inside(int x,int y){
     return (dst.x<=x && x<=dst.x+dst.w && dst.y<=y && y<=dst.y+dst.h); 
   }
@@ -68,9 +71,17 @@ class Sprite{
 };
 
 class Character:public Sprite{
+    //Stats
+    protected:
+    float speed;
+    int health, dmg;
+    //pos
     float px,py,vx,vy,ax,ay;
+    
   public:
   Character(SDL_Renderer *renderer,int count=1,string fname="image",string exten=".bmp",
+      int newHealth = 1, int newDmg = 0,
+      float newSpeed = 1,
       int newX=0,int newY=0,
       float newVx=0.0,float newVy=0.0,
       float newAx=0.0,float newAy=0.0)
@@ -78,6 +89,12 @@ class Character:public Sprite{
     //px=rand()%640-32.0;
     //py=rand()%240-16.0;
     //if (newX==0 && newY==0) {
+      //stat setters
+      health=newHealth;
+      dmg=newDmg;
+      speed=newSpeed;
+
+      //pos setters
       px=newX;
       py=newY;
       vx=newVx;
@@ -87,28 +104,85 @@ class Character:public Sprite{
     //}
   }
  
+//stats updates
+  void takeDamage(int damage = 0){
+    health -= damage; // dmgReduction(damage_taken); could work for % off damage
+    if (health<=0) die();
+  }
+  int damage(){
+    return dmg;
+  } 
+  float getPX(){ return px;}
+  float getPY(){ return py;}
+  float getSpeed(){return speed;}
+  int getHP(){return health;}
+
   void update(float dt){
     if (dead) return;
     Sprite::update(dt);
-    vx=vx+ax*dt;
-    px=px+vx*dt;
-    vy=vy+ay*dt;
-    py=py+vy*dt;
-/*    if (px<0) px=640-32;
-    if (px>640) px=0;
-    if (py<0) py=480-32;
-    if (py>480) py=0;*/
+   
+  }
+  
+  void keyEvent(SDL_Keycode symbol, float playerSpeedX, float playerSpeedY){
+  
+  }
+};
+
+class Player:public Character{
+
+  public:
+  Player(SDL_Renderer *renderer,int count=1,string fname="image",string exten=".bmp",
+      int newHealth = 1, int newDmg = 0,
+      float newSpeed = 1,
+      int newX=0,int newY=0,
+      float newVx=0.0,float newVy=0.0,
+      float newAx=0.0,float newAy=0.0)
+      :Character(renderer,count,fname,exten,newHealth,newDmg,newSpeed,newX,newY,newVx,newVy,newAx,newAy){
+
+      }
+};
+
+class Enemy:public Character{//NOTE:: this is where we can add the suff for skills/items interaction with the player
+
+
+  public:
+  Enemy(SDL_Renderer *renderer,int count=1,string fname="image",string exten=".bmp",
+      int newHealth = 1, int newDmg = 1,
+      float newSpeed = 1,
+      int newX=0,int newY=0,
+      float newVx=0.0,float newVy=0.0,
+      float newAx=0.0,float newAy=0.0)
+      :Character(renderer,count,fname,exten,newHealth,newDmg,newSpeed,newX,newY,newVx,newVy,newAx,newAy){
+
+      }
+
+  float movementX(){
+    int midPoint = WIDTH/2;
+    int move = 1;
+    if (px > midPoint) {move = -1;}
+    return speed*move;
+    }
+  float movementY(){
+    int midPoint = HEIGHT/2;
+    int move=1;
+    if (py > midPoint) {move = -1;}
+    return speed*move;
+  }
+  void update(float dt){
+    if (dead) return;
+    Sprite::update(dt);
+    //moves towards center
+    px += movementX();
+    py += movementY();
+
     moveTo(px,py);     
   }
-  void keyEvent(SDL_Keycode symbol){
-    if (symbol==SDLK_SPACE) {
-            vx=vx+10.0;
-            vy=vy+-10.0;
-        }
-    if (symbol==SDLK_a) px-=32.0;
-    if (symbol==SDLK_d) px+=32.0;
-    if (symbol==SDLK_w) py-=32.0;
-    if (symbol==SDLK_s) py+=32.0;
+  void keyEvent(SDL_Keycode symbol, float playerSpeedX, float playerSpeedY){
+    
+    if (symbol==SDLK_a) {px+=playerSpeedX;}
+    if (symbol==SDLK_d) {px-=playerSpeedX;}
+    if (symbol==SDLK_w) {py+=playerSpeedY;}
+    if (symbol==SDLK_s) {py-=playerSpeedY;}
   } 
 
 };
