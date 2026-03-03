@@ -186,3 +186,4 @@ class Enemy:public Character{//NOTE:: this is where we can add the suff for skil
   } 
 
 };
+
