@@ -1,4 +1,5 @@
 #include <SDL.h>
+#include <sstream>
 #include <iostream>
 #include <vector>
 #include <map>
@@ -22,4 +23,8 @@ MediaManager mm;
 int main(int argc, char* args[])
 {
     cout << "Our game is here." << endl;
+    MyGame m;
+    m.run();
+
+    return 0;
 }

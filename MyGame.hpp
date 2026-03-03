@@ -9,7 +9,7 @@ class MyGame:public Game
     {
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         // our initial state here
-        for (int i = 0; i < 2000; i++) { characters.push_back(new Character(renderer)); }
+        characters.push_back(new Character(renderer));
     }
     void update(float dt) { for (auto c:characters) c->update(dt); }
     void keyHandler(SDL_Keycode symbol) { for (auto c:characters) c->keyEvent(symbol); }
