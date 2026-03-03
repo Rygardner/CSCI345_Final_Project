@@ -31,7 +31,7 @@ class MyGame:public Game
             randY = (HEIGHT/100)*(spawnPoint%100);
             if (spawnPoint <300){randX = WIDTH;}
         }
-        characters.push_back(new Enemy(renderer,1,"image",".bmp",1,1,1,randX,randY));
+        characters.push_back(new Enemy(renderer,1,"Goblin",".bmp",1,1,1,randX,randY));
     }
 
     void setup()
@@ -40,7 +40,7 @@ class MyGame:public Game
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         // our initial state here
         player = new Player(renderer,1,"karl",".bmp",100,1,10,WIDTH/2,HEIGHT/2);
-        for (int i = 0; i < 2; i++) { characters.push_back(new Enemy(renderer)); }
+        //for (int i = 0; i < 2; i++) { characters.push_back(new Enemy(renderer)); }
         
     }
     void update(float dt,int ticks) { 
@@ -48,7 +48,7 @@ class MyGame:public Game
         for (auto c:characters) {//colitions
             if (player->collided(c)) {
                 player->takeDamage(c->damage());
-                cout<<"HIT"<<player->getHP()<<endl;
+                //cout<<"HIT"<<player->getHP()<<endl;
                 c->die();
             }
         }
@@ -61,7 +61,7 @@ class MyGame:public Game
     void keyHandler(SDL_Keycode symbol) { for (auto c:characters) c->keyEvent(symbol,player->getSpeed(),player->getSpeed()); }
     void draw()
     {
-        SDL_SetRenderDrawColor(renderer, rcount, 0, bcount, 255);
+        SDL_SetRenderDrawColor(renderer, rcount, 150, bcount, 255);
         for (auto c:characters) {c->draw(renderer);}
         player->draw(renderer);
     }

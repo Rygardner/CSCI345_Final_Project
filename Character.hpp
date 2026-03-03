@@ -53,12 +53,12 @@ class Sprite{
     SDL_RenderCopy(renderer, textures[which], &src, &finalDst);
   }
   Sprite(SDL_Renderer *renderer,int count=1,string fname="image",string exten=".bmp",
-      int newX=0,int newY=0){
+      int newX=0,int newY=0,int r = 173, int g = 54, int b = 58){
     for (int i=0;i<count;i++){
       stringstream ss;
       ss << fname << i << exten;
       //cout << ss.str() << endl;
-      textures.push_back(mm.read(renderer,ss.str().c_str(),src.w,src.h));
+      textures.push_back(mm.read(renderer,ss.str().c_str(),src.w,src.h,r,g,b));
     }
     src.x=0; src.y=0;
     dst.w=src.w; dst.h=src.h;
@@ -84,8 +84,9 @@ class Character:public Sprite{
       float newSpeed = 1,
       int newX=0,int newY=0,
       float newVx=0.0,float newVy=0.0,
-      float newAx=0.0,float newAy=0.0)
-    :Sprite(renderer,count,fname,exten,newX,newY){
+      float newAx=0.0,float newAy=0.0,
+      int r=173, int g=54, int b=58)
+    :Sprite(renderer,count,fname,exten,newX,newY,r,g,b){
     //px=rand()%640-32.0;
     //py=rand()%240-16.0;
     //if (newX==0 && newY==0) {
@@ -136,7 +137,8 @@ class Player:public Character{
       float newSpeed = 1,
       int newX=0,int newY=0,
       float newVx=0.0,float newVy=0.0,
-      float newAx=0.0,float newAy=0.0)
+      float newAx=0.0,float newAy=0.0,
+      int r=173, int g=54, int b=58)
       :Character(renderer,count,fname,exten,newHealth,newDmg,newSpeed,newX,newY,newVx,newVy,newAx,newAy){
 
       }
@@ -151,7 +153,8 @@ class Enemy:public Character{//NOTE:: this is where we can add the suff for skil
       float newSpeed = 1,
       int newX=0,int newY=0,
       float newVx=0.0,float newVy=0.0,
-      float newAx=0.0,float newAy=0.0)
+      float newAx=0.0,float newAy=0.0,
+      int r=0, int g=0, int b=0)
       :Character(renderer,count,fname,exten,newHealth,newDmg,newSpeed,newX,newY,newVx,newVy,newAx,newAy){
 
       }

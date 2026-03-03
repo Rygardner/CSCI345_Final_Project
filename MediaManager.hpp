@@ -3,12 +3,12 @@
 class MediaManager{
     map<string,SDL_Texture *> images;
     public:
-    SDL_Texture* read(SDL_Renderer *renderer,string fname,int &w,int &h){
+    SDL_Texture* read(SDL_Renderer *renderer,string fname,int &w,int &h,int r,int g, int b){
         if (images.find(fname)==images.end()){
           string fullPath="./assets/"+fname;
           SDL_Surface* character=SDL_LoadBMP(fullPath.c_str());
           if (character==NULL) {cout<<fname<<endl;throw "Could not read image.bmp file";}
-          SDL_SetColorKey(character,SDL_TRUE,SDL_MapRGB(character->format,173,54,58));
+          SDL_SetColorKey(character,SDL_TRUE,SDL_MapRGB(character->format,r,g,b));
           SDL_Texture* charText=SDL_CreateTextureFromSurface(renderer,character);
           SDL_FreeSurface(character);
           if(charText==NULL) throw "Failed to create texture";
