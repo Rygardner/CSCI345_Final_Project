@@ -7,6 +7,7 @@ class MediaManager
     public:
     SDL_Texture* read(SDL_Renderer *renderer, string fname, int &w, int &h)
     {
+        std::cout << "Loading: " << fname.c_str() << std::endl;
         if (images.find(fname) == images.end())
         {
             SDL_Surface* character = SDL_LoadBMP(fname.c_str());

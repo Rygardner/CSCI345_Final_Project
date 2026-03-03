@@ -113,3 +113,45 @@ class Character:public Sprite
         if (symbol == SDLK_s) py += 32.0;
     }
 };
+
+class Enemy:public Sprite
+{
+    float px, py, vx, vy, ax, ay;
+
+    public:
+    Enemy(SDL_Renderer *renderer, int count = 1, string fname = "assets/image",
+              string exten = ".bmp", int newX = 0, int newY = 0, float newVx = 0.0,
+              float newVy = 0.0, float newAx = 0.0, float newAy = 0.0)
+              :Sprite(renderer, count, fname, exten, newX, newY)
+    {
+        px = newX;
+        py = newY;
+        vx = newVx;
+        vy = newVy;
+        ax = newAx;
+        ay = newAy;
+    }
+    void update(float dt)
+    {
+        if (dead) return;
+        Sprite::update(dt);
+
+        vx += ax * dt;
+        px += vx * dt;
+        vy += ay * dt;
+        py += vy * dt;
+
+        moveTo(px, py);
+    }
+    void keyEvent(SDL_Keycode symbol)
+    { /* WIDTH: 768px   HEIGHT: 640px */
+        std::cout << "Location: " << px << "x, " << py << "y." << std::endl;
+        if (symbol == SDLK_SPACE || symbol == SDLK_a || symbol == SDLK_d || symbol == SDLK_w || symbol == SDLK_s)
+        { /* When the player acts, enemies move towards the center of the screen (eventually, where the player always is) */
+            if (px >= (768 / 2) - 192.0) px -= 32.0;
+            if (px < (768 / 2) - 192.0) px += 32.0;
+            if (py >= (640 / 2) - 12.0) py -= 32.0;
+            if (py < (640 / 2) - 128.0) py += 32.0;
+        }
+    }
+};

@@ -1,0 +1,2 @@
+### Notes on Asset Naming
+* Due to the for loop in the `Sprite` (and by inheritance, also the `Character`) constructor, all assets need to be apended with a number based on when in the loop they should be added. For assets loaded only once, just make sure the count is 1 and the asset has a 0 at the end of its name.
